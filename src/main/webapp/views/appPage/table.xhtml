@@ -1,0 +1,58 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:outputStylesheet name="styles/table.css"/>
+
+    <section class="table_section">
+
+        <!-- Кнопка очистки таблицы -->
+        <div id="cleaner">
+            <h:commandButton styleClass="cleanerButton" value="CLEAN TABLE" action="#{hitProcessor.clear}">
+                <f:ajax render="hitTable"/>
+            </h:commandButton>
+        </div>
+
+        <p:remoteCommand name="updateTable" update="hitTable"/>
+
+        <!--         Таблица регистрирующая попадания -->
+        <h:dataTable value="${hitProcessor.user.hitList}"
+                     var="hit"
+                     styleClass="hitTable"
+                     id="hitTable">
+
+            <h:column>
+                <f:facet name="header">X</f:facet>
+                ${hit.tableX}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Y</f:facet>
+                ${hit.tableY}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">R</f:facet>
+                ${hit.tableR}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">CURRENT TIME</f:facet>
+                ${hit.currentTime}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">EXECUTION TIME</f:facet>
+                ${hit.executionTime}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">HIT RESULT</f:facet>
+                ${hit.tableResult}
+            </h:column>
+        </h:dataTable>
+    </section>
+</ui:composition>

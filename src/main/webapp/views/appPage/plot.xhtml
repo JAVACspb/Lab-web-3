@@ -1,0 +1,23 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:outputStylesheet name="styles/plot.css"/>
+
+    <p:remoteCommand name="getDots" action="#{hitProcessor.synchronizeDots}"/>
+
+    <!-- Координатная плоскость с содержимым -->
+    <div id='plot'></div>
+
+    <!-- Метод js для вызова метода на бине (ex. rc([{name: 'x', value: x}, {name: 'y', value: y}]))-->
+    <p:remoteCommand name="addClick" update="msgs, hitTable" action="#{hitProcessor.serviceClick}"/>
+
+    <!-- Алерты для вывода результата валидации сервера -->
+    <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" widgetVar="msgsWidget"/>
+
+    <h:outputScript name="scripts/graphHandler.js"/>
+    <h:outputScript name="scripts/windowHandler.js"/>
+
+</ui:composition>

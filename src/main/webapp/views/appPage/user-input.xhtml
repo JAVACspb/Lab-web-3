@@ -1,0 +1,84 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:outputStylesheet name="styles/user_input.css"/>
+    <h:outputScript name="scripts/graphHandler.js"/>
+
+    <!-- Форма для отправки данных серверу с помощью метода POST -->
+    <h:form id="form">
+
+        <!-- Блок для ввода значений переменных -->
+        <div class="values">
+
+            <!-- Блок для значения Y -->
+            <div class="X_value">
+
+                <!-- Поле для ввода значения X -->
+                <h:outputLabel for="X_value" value="X value:"/>
+                <h:inputText id="X_value"
+                             value="#{hitProcessor.newHit.x}"
+                             maxlength="6"
+                             pt:placeholder="Заполни меня"/>
+            </div>
+
+            <!-- Блок для значения Y -->
+            <div class="Y_value">
+
+                <!-- Поле ввода значения Y -->
+                <h:outputLabel for="Y_value" value="Y value:"/>
+                <h:inputText id="Y_value"
+                             value="#{hitProcessor.newHit.y}"
+                             maxlength="6"
+                             pt:placeholder="Заполни меня"/>
+            </div>
+
+            <!-- Блок для значения R -->
+            <div class="R_value">
+
+                <!-- Поле ввода значения R -->
+                <h:outputLabel for="R_value" value="R value:"/>
+                <h:inputText id="R_value"
+                             styleClass="sliderValue"
+                             value="#{hitProcessor.newHit.r}"
+                             pt:placeholder="Заполни меня"
+                             required="true"
+                             requiredMessage="Введите координату R!"
+                             converterMessage="Параметр R задается действительным числом!"
+                             validatorMessage="Параметр R задается числом в промежутке [2...5]!">
+                    <f:validateDoubleRange minimum="2" maximum="5"/>
+                </h:inputText>
+                <p:slider id="slider" for="R_value" styleClass="slider" minValue="2" maxValue="5" step="0.1"
+                          onSlide="switchRadius(),
+                          injectRAlert(document.getElementById('form:R_value'))"
+                          onSlideEnd="switchRadius()"/>
+            </div>
+        </div>
+
+        <!-- Инвокер команды на бине и табло отображения серверных сообщений -->
+        <p:remoteCommand name="addHit" update="msgs" action="#{hitProcessor.serviceForm}"/>
+        <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" widgetVar="msgsWidget"/>
+
+        <!-- Отображение клиентской валидации -->
+        <div id="Error_text">
+            <span id="X_error"/>
+            <span id="Y_error"/>
+            <span id="R_error"/>
+        </div>
+
+        <!-- Блок для кнопки отправки -->
+        <div class="buttons">
+            <h:commandButton id="submit" styleClass="submit" value="SUBMIT" onclick="processSubmit()">
+                <f:ajax render="hitTable"/>
+            </h:commandButton>
+        </div>
+    </h:form>
+
+    <h:outputScript name="scripts/validator.js"/>
+    <h:outputScript name="scripts/alertHandler.js"/>
+
+</ui:composition>
